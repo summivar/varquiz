@@ -1,0 +1,58 @@
+version: '3.7'
+
+services:
+  mongo:
+    image: mongo:latest
+    network_mode: "host"
+    restart: always
+    volumes:
+      - ./backend/mongo_db:/data/db
+  rabbitmq:
+    image: rabbitmq:3-management
+    network_mode: "host"
+    volumes:
+      - ./backend/rabbitmq/etc/definitions.json:/etc/rabbitmq/definitions.json
+      - ./backend/rabbitmq/etc/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      - ./backend/rabbitmq/data:/var/lib/rabbitmq/mnesia/rabbit@my-rabbit
+      - ./backend/rabbitmq/logs:/var/log/rabbitmq/log
+  userservice:
+    network_mode: "host"
+    build:
+      context: ./backend/user
+      dockerfile: Dockerfile
+    volumes:
+      - ./backend/user:/userservice
+      - /userservice/node_modules
+    command: npm run start:dev
+    restart: always
+    depends_on:
+      - mongo
+      - rabbitmq
+  emailservice:
+      network_mode: "host"
+      build:
+        context: ./backend/email
+        dockerfile: Dockerfile
+      volumes:
+        - ./backend/email:/emailservice
+        - /emailservice/node_modules
+      command: npm run start:dev
+      restart: always
+      depends_on:
+        - mongo
+        - rabbitmq
+  frontend:
+    network_mode: "host"
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    volumes:
+      - ./frontend:/frontend
+      - /frontend/node_modules
+    command: npm run start:no-host-check
+    restart: always
+    depends_on:
+      - userservice
+      - emailservice
+volumes:
+  mongo: {}

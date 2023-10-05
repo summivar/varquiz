@@ -1,0 +1,43 @@
+<div class="card mt-3">
+  <h4 *ngIf="!dataResponse?.cards?.length; else showId" class="card-header py-3 text-center">Test</h4>
+  <ng-template #showId>
+    <h4 [ngStyle]="differences && isCorrect ? {'border': '2px solid green'} : {}" class="card-header py-3 text-center">Test {{currentId}} / {{cards!.length}}</h4>
+  </ng-template>
+
+  <div *ngIf="isLoading; else container" class="justify-content-center align-items-center">
+    <p class="text-center">Is loading...</p>
+  </div>
+</div>
+
+<ng-template #container>
+  <div class="card-body justify-content-center align-items-center" *ngIf="!dataResponse?.cards?.length; else card">
+    <p class="text-center mb-0">You have no cards in studyset</p>
+  </div>
+  <div class="card-footer" *ngIf="!dataResponse?.cards?.length">
+    <p class="text-center mb-0">
+      <a [href]="studysetURL" class="link-primary link-opacity-75-hover link-underline-light">
+        Get back
+      </a>
+    </p>
+  </div>
+  <ng-template #card>
+    <div [ngStyle]="differences && isCorrect ? {'border': '2px solid green'} : {}" class="d-flex justify-content-center align-items-center mt-2 flex-column ps-4 pe-4">
+      <form class="input-group mb-3 mt-3" (submit)="checkTerm()">
+        <input class="form-control" type="text" [(ngModel)]="currentText" [disabled]="isChecking"
+               placeholder="Write here correct term" aria-label="Write here correct term"
+               aria-describedby="checkButton" name="currentText">
+        <button class="btn btn-outline-primary" type="button" id="checkButton" [disabled]="isChecking || !currentText"
+        >
+          <span *ngIf="isChecking" class="spinner-border spinner-border-sm mr-1"></span>
+          Check
+        </button>
+      </form>
+      <div *ngIf="!isCorrect">
+        <h3 [innerHTML]="differences"></h3>
+      </div>
+      <div>
+        <h3 class="mb-3">Term for: {{cards[currentId - 1].definition}}</h3>
+      </div>
+    </div>
+  </ng-template>
+</ng-template>

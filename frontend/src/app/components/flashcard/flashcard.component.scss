@@ -1,0 +1,62 @@
+.card__container {
+  width: 400px;
+}
+
+.card__content {
+  text-align: center;
+  position: relative;
+  padding: 15em 5em;
+  transition: transform 0.6s;
+  transform-style: preserve-3d;
+}
+
+.card__rotate {
+  transform: rotateY(.5turn);
+}
+
+.card__front,
+.card__back {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5em 3em;
+  backface-visibility: hidden;
+  transform-style: preserve-3d;
+  display: grid;
+  align-content: center;
+}
+
+.card__front {
+  background-blend-mode: overlay;
+  color: aliceblue;
+  background: #3b3d40;
+}
+
+.card__title {
+  transform: translateZ(9rem);
+  order: 2;
+}
+
+.card__subtitle {
+  transform: translateZ(6rem);
+  text-transform: uppercase;
+  letter-spacing: 4px;
+  font-size: .75rem;
+  font-weight: 400;
+  opacity: .7;
+}
+
+.card__body {
+  transform: translateZ(6rem);
+  font-weight: 400;
+  font-size: 1.5rem;
+  line-height: 1.6;
+}
+
+.card__back {
+  transform: rotateY(.5turn);
+  color: #3b3d40;
+  background: aliceblue;;
+}

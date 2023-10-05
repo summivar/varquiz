@@ -1,0 +1,82 @@
+<div class="card mt-3">
+  <h4 *ngIf="!dataResponse?.cards?.length; else showId" class="card-header py-3 text-center">Flashcard</h4>
+  <ng-template #showId>
+    <h4 class="card-header py-3 text-center">Flashcard {{currentId}} / {{cards!.length}}</h4>
+  </ng-template>
+
+  <div *ngIf="isLoading; else container" class="justify-content-center align-items-center">
+    <p class="text-center">Is loading...</p>
+  </div>
+</div>
+
+<ng-template #container>
+  <div class="card-body justify-content-center align-items-center" *ngIf="!dataResponse?.cards?.length; else card">
+    <p class="text-center mb-0">You have no cards in studyset</p>
+  </div>
+  <div class="card-footer" *ngIf="!dataResponse?.cards?.length">
+    <p class="text-center mb-0">
+      <a [href]="studysetURL" class="link-primary link-opacity-75-hover link-underline-light">
+        Get back
+      </a>
+    </p>
+  </div>
+  <ng-template #card>
+    <ng-container *ngIf="!isReversed">
+      <div class="mt-2 mb-2 d-flex justify-content-center align-items-center">
+        <i *ngIf="currentId > 1" class="me-2 bi bi-arrow-left-square-fill" (click)="switchId('left-arrow')"></i>
+        <i *ngIf="currentId === 1" class="me-2 bi bi-arrow-left-square" (click)="switchId('left-arrow')"></i>
+        <div class="card__container">
+          <div class="card__content" [ngClass]="{'card__rotate': isFlipped}" (click)="flipCard()">
+            <div class="card__front">
+              <h3 class="card__title">{{cards[currentId - 1].definition}}</h3>
+            </div>
+            <div class="card__back">
+              <p class="card__body">{{cards[currentId - 1].term}}</p>
+            </div>
+          </div>
+        </div>
+        <i *ngIf="currentId < dataResponse!.cards!.length" class="ms-2 bi bi-arrow-right-square-fill" (click)="switchId('right-arrow')"></i>
+        <i *ngIf="currentId === dataResponse!.cards!.length" class="ms-2 bi bi-arrow-right-square" (click)="switchId('right-arrow')"></i>
+      </div>
+      <div class="card-footer d-flex justify-content-center align-items-center flex-column">
+        <div class="form-check form-switch">
+          <input (click)="shuffle()" [(ngModel)]="isShuffled" class="form-check-input" type="checkbox" role="switch" id="switchCheckShuffleNonReversed">
+          <label class="form-check-label" for="switchCheckShuffleNonReversed">Is shuffled?</label>
+        </div>
+        <div class="form-check form-switch">
+          <input [(ngModel)]="isReversed" class="form-check-input" type="checkbox" role="switch" id="switchCheckReverseNonReversed">
+          <label class="form-check-label" for="switchCheckReverseNonReversed">Is reversed?</label>
+        </div>
+      </div>
+    </ng-container>
+    <ng-container *ngIf="isReversed">
+      <div class="mt-2 mb-2 d-flex justify-content-center align-items-center">
+        <i *ngIf="currentId > 1" class="me-2 bi bi-arrow-left-square-fill" (click)="switchId('left-arrow')"></i>
+        <i *ngIf="currentId === 1" class="me-2 bi bi-arrow-left-square" (click)="switchId('left-arrow')"></i>
+        <div class="card__container">
+          <div class="card__content" [ngClass]="{'card__rotate': isFlipped}" (click)="flipCard()">
+            <div class="card__front">
+              <h3 class="card__title">{{cards[currentId - 1].term}}</h3>
+            </div>
+            <div class="card__back">
+              <p class="card__body">{{cards[currentId - 1].definition}}</p>
+            </div>
+          </div>
+        </div>
+        <i *ngIf="currentId < dataResponse!.cards!.length" class="ms-2 bi bi-arrow-right-square-fill" (click)="switchId('right-arrow')"></i>
+        <i *ngIf="currentId === dataResponse!.cards!.length" class="ms-2 bi bi-arrow-right-square" (click)="switchId('right-arrow')"></i>
+      </div>
+      <div class="card-footer d-flex justify-content-center align-items-center flex-column">
+        <div class="form-check form-switch">
+          <input (click)="shuffle()" [(ngModel)]="isShuffled" class="form-check-input" type="checkbox" role="switch" id="switchCheckShuffleReversed">
+          <label class="form-check-label" for="switchCheckShuffleReversed">Is shuffled?</label>
+        </div>
+        <div class="form-check form-switch">
+          <input [(ngModel)]="isReversed" class="form-check-input" type="checkbox" role="switch" id="switchCheckReverseReversed">
+          <label class="form-check-label" for="switchCheckReverseReversed">Is reversed?</label>
+        </div>
+      </div>
+    </ng-container>
+  </ng-template>
+</ng-template>
+

@@ -1,0 +1,28 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark px-3" *ngIf="authService.isAuth; else notAuthenticated" data-bs-theme="dark">
+  <div class="navbar-nav">
+    <a class="nav-item nav-link" routerLink="/" routerLinkActive="active">Home</a>
+    <a class="nav-item nav-link" routerLink="/dashboard" routerLinkActive="active">Dashboard</a>
+    <div class="col">
+      <div ngbDropdown class="d-inline-block">
+        <button type="button" class="btn btn-link nav-item nav-link" id="dropdownEmail" ngbDropdownToggle>
+          {{userService.getUser()!.user!.email}}
+        </button>
+        <div class="dropdown-menu dropdown-menu-end" ngbDropdownMenu aria-labelledby="dropdownEmail">
+          <a ngbDropdownItem routerLink="addstudyset">Add studyset</a>
+          <button ngbDropdownItem (click)="logout()">Logout</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</nav>
+<ng-template #notAuthenticated>
+  <nav class="navbar navbar-expand navbar-dark bg-dark px-3">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link" routerLink="/">Home</a>
+      <a class="nav-item nav-link" routerLink="/signup">Sign up</a>
+      <a class="nav-item nav-link" routerLink="/signin">Sign in</a>
+    </div>
+  </nav>
+</ng-template>
+
+

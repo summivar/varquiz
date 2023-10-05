@@ -1,0 +1,36 @@
+<div *ngIf="isLoading; else container" class="d-flex justify-content-center align-items-center">
+  <span>Is loading..</span>
+</div>
+
+<ng-template #container>
+  <h2 class="text-center mt-4">You have {{studysets?.length | number}} studysets</h2>
+
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th scope="col">#</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Count of cards</th>
+      <th scope="col">Last update</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let studyset of studysets; index as i">
+      <th scope="row">{{ i + 1 }}</th>
+      <td>
+        <a [routerLink]="['/studyset', studyset._id]">
+          {{ studyset.title }}
+        </a>
+      </td>
+      <td>{{ studyset.description ? studyset.description : 'No description' }}</td>
+      <td>{{ studyset.cards?.length | number }}</td>
+      <td>{{ studyset.updatedAt! | utcToLocalTime: 'short'}}</td>
+    </tr>
+    </tbody>
+  </table>
+  <a [routerLink]="['/addstudyset']" class="btn btn-primary"
+     style="--bs-btn-padding-y: .36rem; --bs-btn-padding-x: .72rem; --bs-btn-font-size: 1.08rem;">
+    Add new studyset
+  </a>
+</ng-template>
